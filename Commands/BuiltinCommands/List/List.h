@@ -63,7 +63,7 @@ public:
     struct dirent* entry;
 
     while ((entry = readdir(dir)) != nullptr) {
-      output += entry ->d_name;
+      output += entry->d_name;
       output += "\n";
     }
 
