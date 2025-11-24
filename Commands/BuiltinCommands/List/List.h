@@ -4,6 +4,7 @@
 #include <vector>
 #include "../../Command.h"
 #include "Manual.h"
+#include <dirent.h>
 
 
 
@@ -31,13 +32,45 @@ public:
     // in the execute command itself.
     // tokens should contain all of the command inputs the user provided
     // in order. However, It will not contain the command at the start.
-    return true;
+    if (tokens.size() == 1) {
+      return true;
+  } else {
+    return false;
+    }
   }
 
   vector<string> executeCommand() override {
     // TODO: implement
     // Will assume validateSyntax was already called, but add error handling just in case
-    return {"Not Implemented", "500"};
+    if (!validateSyntax(tokenizedCommand)) {
+      return { "ls: too many arguments", "400"};
+    }
+
+    const char* path = nullptr;
+
+    if (tokenizedCommand.empty()) {
+      path = ".'";
+    } else {
+      path = tokenizedCommand[0].c_str();
+    }
+
+    DIR* dir = opendir(path);
+    if (!dir) {
+      return { "ls: cannot open directory: " + tokenizedCommand[0], "404"}
+    }
+
+    std::string output;
+    struct dirent* entry;
+
+    while ((entry = readdir(dir)) != nullptr) {
+      output += entry ->d_name;
+      output += "\n";
+    }
+
+
+    closedir(dir);
+
+    return { output, "200 "};
   }
 
 private:

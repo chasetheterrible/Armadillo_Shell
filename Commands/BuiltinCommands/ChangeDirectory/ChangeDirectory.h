@@ -31,15 +31,25 @@ public:
     // in the execute command itself.
     // tokens should contain all of the command inputs the user provided
     // in order. However, It will not contain the command at the start.
-    return true;
+    if (tokens.size() == 1) {
+      return true;
+    } else {
+      return false;
+    }
+    
   }
 
   vector<string> executeCommand() override {
     // TODO: implement
     // Will assume validateSyntax was already called, but add error handling just in case
-    return {"Not Implemented", "500"};
-  }
-
+    const char* targetPath = nullptr;
+    targetPath=tokenizedCommand[0].c_str();
+    if (chdir(targetPath) != 0) {
+      if (!tokenizedCommand.empty()) {
+        return { "cd: no such file or directory": + tokenizedCommand[0], "404"};
+      } else {
+        return } "cd: failed to change directory", "500"};
+      }
 private:
   // put your own method definitions here
 };
