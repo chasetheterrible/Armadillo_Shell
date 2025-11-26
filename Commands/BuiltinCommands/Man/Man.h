@@ -5,42 +5,59 @@
 #include "../../Command.h"
 #include "Manual.h"
 
-
-
 // ===================={ Man Command }====================
-// TODO: add documentation to the manual file so James knows what flags and other info you implemented
 
-
-class Man : public Command<Man> { // Command class needs to be inherited in order to work!!!
-  vector<string> tokenizedCommand;
-  // add more class variables as needed.
+class Man : public Command<Man> {
+  std::vector<std::string> tokenizedCommand;
 
 public:
-  explicit Man(vector<string>& tokens) {
-    tokenizedCommand = tokens; // should save arguments in the order they were passed in
+  explicit Man(std::vector<std::string>& tokens) {
+    tokenizedCommand = tokens; // arguments after "man"
   }
 
-  static string returnManText() {
-    return ManManual;
+  static std::string returnManText() {
+    return ManManual;   // description of the man command itself
   }
 
-  static bool validateSyntax(vector<string>& tokens) {
-    // TODO: implement
-    // this should be a simple validation so it can be used when validating
-    // commands that are getting piped. More thorough validations can be done
-    // in the execute command itself.
-    // tokens should contain all of the command inputs the user provided
-    // in order. However, It will not contain the command at the start.
-    return true;
+  static bool validateSyntax(std::vector<std::string>& tokens) {
+    // Require exactly one argument: man <command>
+    return tokens.size() == 1;
   }
 
-  vector<string> executeCommand() override {
-    // TODO: implement
-    // Will assume validateSyntax was already called, but add error handling just in case
-    return {"Not Implemented", "500"}; ;;
+  std::vector<std::string> executeCommand() override {
+    if (!validateSyntax(tokenizedCommand)) {
+      return { "man: usage: man <command>", "400" };
+    }
+
+    std::string topic = tokenizedCommand[0];
+    std::string manualText;
+
+ 
+    if (topic == "man") {
+      manualText = ManManual;
+    } else if (topic == "cd" || topic == "changedirectory") {
+      manualText = ChangeDirectoryManual;
+    } else if (topic == "ls" || topic == "list") {
+      manualText = ListManual;
+    } else if (topic == "cp" || topic == "copy") {
+      manualText = CopyManual;
+    } else if (topic == "mkdir" || topic == "makedirectory") {
+      manualText = MakeDirectoryManual;
+    } else if (topic == "echo") {
+      manualText = EchoManual;
+    } else if (topic == "date") {
+      manualText = DateManual;
+    } else if (topic == "grep") {
+      manualText = GrepManual;
+    }
+    // TODO: add more commands here as you implement them
+    else {
+      return { "man: no manual entry for " + topic, "404" };
+    }
+
+    return { manualText, "200" };
   }
 
 private:
-  // put your own method definitions here
+  // helper methods if needed
 };
-
