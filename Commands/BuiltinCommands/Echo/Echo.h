@@ -10,19 +10,19 @@
 
 
 class Echo : public Command<Echo> { // Command class needs to be inherited in order to work!!!
-  vector<string> tokenizedCommand;
+  std::vector<std::string> tokenizedCommand;
   // add more class variables as needed.
 
 public:
-  explicit Echo(vector<string>& tokens) {
+  explicit Echo(std::vector<std::string>& tokens) {
     tokenizedCommand = tokens; // should save arguments in the order they were passed in
   }
 
-  static string returnManText() {
+  static std::string returnManText() {
     return EchoManual;
   }
 
-  static bool validateSyntax(vector<string>& tokens) {
+  static bool validateSyntax(std::vector<std::string>& tokens) {
     // TODO: implement
     // this should be a simple validation so it can be used when validating
     // commands that are getting piped. More thorough validations can be done
@@ -32,10 +32,17 @@ public:
     return true;
   }
 
-  vector<string> executeCommand() override {
+  std::vector<std::string> executeCommand() override {
     // TODO: implement
     // Will assume validateSyntax was already called, but add error handling just in case
-    return {"Not Implemented", "500"}; ;;
+    std::string message;
+    for (size_t i=0; i , tokenizedCommand.size(); ++i) {
+      message += tokenizedCommand[i];
+      if (i + 1 < tokenizedCommand.size()) {
+        message += " ";
+      }
+    }
+    return {"Not Implemented", "500"};
   }
 
 private:

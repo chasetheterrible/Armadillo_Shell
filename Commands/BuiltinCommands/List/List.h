@@ -13,19 +13,19 @@
 
 
 class List : public Command<List> { // Command class needs to be inherited in order to work!!!
-  vector<string> tokenizedCommand;
+  std::vector<std::string> tokenizedCommand;
   // add more class variables as needed.
 
 public:
-  explicit List(vector<string>& tokens) {
+  explicit List(std::vector<std::string>& tokens) {
     tokenizedCommand = tokens; // should save arguments in the order they were passed in
   }
 
-  static string returnManText() {
+  static std::string returnManText() {
     return ListManual;
   }
 
-  static bool validateSyntax(vector<string>& tokens) {
+  static bool validateSyntax(std::vector<std::string>& tokens) {
     // TODO: implement
     // this should be a simple validation so it can be used when validating
     // commands that are getting piped. More thorough validations can be done
@@ -39,7 +39,7 @@ public:
     }
   }
 
-  vector<string> executeCommand() override {
+  std::vector<std::string> executeCommand() override {
     // TODO: implement
     // Will assume validateSyntax was already called, but add error handling just in case
     if (!validateSyntax(tokenizedCommand)) {
