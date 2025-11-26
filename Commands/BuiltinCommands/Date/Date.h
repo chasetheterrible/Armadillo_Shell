@@ -7,34 +7,33 @@
 #include "../../Command.h"
 #include "Manual.h"
 
-using std::chrono::system_clock;
+// using std::chrono::system_clock;
 
 
 // ===================={ date Command }====================
 
 
 class Date : public Command<Date> { // Command class needs to be inherited in order to work!!!
-  vector<string> tokenizedCommand;
+  std::vector<std::string> tokenizedCommand;
   // add more class variables as needed.
 
 public:
-  explicit Date(vector<string>& tokens) {
+  explicit Date(std::vector<std::string>& tokens) {
     tokenizedCommand = tokens; // should save arguments in the order they were passed in
   }
 
-  static string returnManText() {
+  static std::string returnManText() {
     return DateManual;
   }
 
-  static bool validateSyntax(vector<string>& tokens) {
-    if (tokens.empty()) { return true; }
-    return false;
+  static bool validateSyntax(std::vector<std::string>& tokens) {
+    return tokens.empty();
   }
 
-  vector<string> executeCommand() override {
+  std::vector<std::string> executeCommand() override {
     std::chrono::time_point<system_clock> systemTime = system_clock::now();
     std::time_t dateAndTime = system_clock::to_time_t(systemTime);
-    return {std::ctime(&dateAndTime), "200"};
+    return { std::string(std::ctime(&dateAndTime)), "200"};
   }
 
 private:
